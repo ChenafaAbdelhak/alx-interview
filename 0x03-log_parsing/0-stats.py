@@ -8,7 +8,16 @@ from typing import Tuple, Optional
 
 
 def parse_log(log: str) -> Tuple[Optional[str], Optional[str]]:
-    """Parse a log entry, extracting the status code and file size."""
+    """
+    Parse a log entry, extracting the status code and file size.
+
+    Args:
+        log (str): A string representing a single log entry.
+
+    Returns:
+        A tuple containing the status code and file size.
+        If the log entry does not match the expected format, returns None, None
+    """
     parts = (
         r"(?P<ip>\S+)\d+\.\d+\.\d+\.\d+\s+",
         r"- \[",
@@ -35,7 +44,16 @@ def parse_log(log: str) -> Tuple[Optional[str], Optional[str]]:
 
 
 def process_logs() -> None:
-    """Process logs from standard input."""
+    """
+    Process logs from standard input.
+
+    Reads logs line by line, parses each log to extract the status code and
+    file size, and keeps a running total of the file size and a count
+    of each status code.
+
+    Prints the statistics every 10 lines and when
+    an EOFError or KeyboardInterrupt exception is raised.
+    """
     status_counter, size_counter = Counter(), Counter()
     try:
         for idx, log in enumerate(sys.stdin, start=1):
@@ -51,7 +69,16 @@ def process_logs() -> None:
 
 
 def print_stats(status_counter: Counter, size_counter: Counter) -> None:
-    """Print statistics about the processed logs"""
+    """
+    Print statistics about the processed logs.
+
+    Args:
+        status_counter (Counter): A counter of HTTP status codes.
+        size_counter (Counter): A counter of file sizes.
+
+    Prints the total file size and the count of each status code
+    in ascending order.
+    """
     print(f"\nFile size: {size_counter['size']}")
     for status in sorted(status_counter):
         print(f"{status}: {status_counter[status]}")
